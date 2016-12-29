@@ -1,5 +1,6 @@
 package controllers
 
+import models.MongodbConnection
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase, ScalaObservable}
 import play.api._
@@ -15,9 +16,7 @@ import scala.concurrent.duration._
   */
 object Users extends Controller {
   def index = Action.async {
-    val mongoClient: MongoClient = MongoClient("mongodb://127.0.0.1:27017/")
-    val database: MongoDatabase = mongoClient.getDatabase("portal")
-    val collection: MongoCollection[Document] = database.getCollection("users")
+    val collection: MongoCollection[Document] = MongodbConnection.database.getCollection("users")
     collection.find().collect().toFuture().map(seq => Ok(Document("users" -> seq).toJson))
   }
 }
