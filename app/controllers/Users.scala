@@ -18,7 +18,6 @@ object Users extends Controller {
     val mongoClient: MongoClient = MongoClient("mongodb://127.0.0.1:27017/")
     val database: MongoDatabase = mongoClient.getDatabase("portal")
     val collection: MongoCollection[Document] = database.getCollection("users")
-    collection.find().collect().subscribe((results: Seq[Document]) => println(s"Found BsonDocuments: #${results.size}"))
     collection.find().collect().toFuture().map(seq => Ok(Document("users" -> seq).toJson))
   }
 }
